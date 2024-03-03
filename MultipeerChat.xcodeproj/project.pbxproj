@@ -57,6 +57,7 @@
 
 /* Begin PBXFileReference section */
 		2147554D2B93877200321D5B /* ConversionToGroupsGPT.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ConversionToGroupsGPT.md; sourceTree = "<group>"; };
+		21BE0FC52B94781D00AD55C9 /* ReConnectingUsersMPC.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReConnectingUsersMPC.md; sourceTree = "<group>"; };
 		541F028624C1EB760029F156 /* UserDataRemoval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataRemoval.swift; sourceTree = "<group>"; };
 		542553A7241AE4F400E00962 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		542C58E524250BB2006AAE74 /* BrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserView.swift; sourceTree = "<group>"; };
@@ -151,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				2147554D2B93877200321D5B /* ConversionToGroupsGPT.md */,
+				21BE0FC52B94781D00AD55C9 /* ReConnectingUsersMPC.md */,
 				546D7063241296DB0005AA27 /* AppDelegate.swift */,
 				546D7065241296DB0005AA27 /* SceneDelegate.swift */,
 				882E7D372416577A00E49BF6 /* Model */,

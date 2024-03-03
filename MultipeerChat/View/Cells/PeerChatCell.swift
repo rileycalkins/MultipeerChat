@@ -27,7 +27,8 @@ struct PeerChatCell: View {
     }
     
     var body: some View {
-        HStack(spacing: 16) {
+        VStack {
+            HStack(spacing: 16) {
                 self.image.peerImageModifier()
                     .frame(width: 60, height: 60)
                     .overlay(alignment: .bottomTrailing) {
@@ -51,7 +52,7 @@ struct PeerChatCell: View {
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
-                
             }
+        }
     }
 }

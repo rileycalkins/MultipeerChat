@@ -10,7 +10,8 @@ import MultipeerConnectivity
 import Observation
 
 @Observable
-class AdvertiserViewModel: NSObject, ObservableObject {
+class AdvertiserViewModel: NSObject {
+    var isCurrentlyAdvertising = false
     var didNotStartAdvertising = false
     var shouldShowConnectAlert = false
     var showPeerConnectedAlert = false
@@ -35,23 +36,26 @@ class AdvertiserViewModel: NSObject, ObservableObject {
         super.init()
     }
     
+    
     func startAdvertising() {
         print("Advertising has started")
         advertiser.delegate = self
         advertiser.startAdvertisingPeer()
+        isCurrentlyAdvertising = true
     }
     
     func stopAdvertising() {
         print("Advertising has stopped")
         advertiser.delegate = nil
         advertiser.stopAdvertisingPeer()
+        isCurrentlyAdvertising = false 
     }
     
     func replyToRequest(isAccepted: Bool) {
         isAccepted ? acceptRequest?() : declineRequest?()
     }
     
-    private func handlePeerInvitation(_ peerID: MCPeerID, _ invitationHandler: @escaping (Bool, MCSession?) -> Void) {
+    func handlePeerInvitation(_ peerID: MCPeerID, _ invitationHandler: @escaping (Bool, MCSession?) -> Void) {
         acceptRequest = {
             invitationHandler(true, self.newSession)
             print("Accepted Request")
@@ -80,15 +84,25 @@ extension AdvertiserViewModel: MCNearbyServiceAdvertiserDelegate {
 
 extension AdvertiserViewModel: MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-        DispatchQueue.main.async { [weak self] in
-            if state == .connected {
+        switch state {
+        case .connected:
+            DispatchQueue.main.async { [weak self] in
                 let message = "\(peerID.displayName) is connected successfully."
                 self?.peerConnectedSuccessfully = message
                 self?.showPeerConnectedAlert = true
                 let messageSender = MessageSender(companionPeer: peerID, sessionDelegate: self)
                 messageSender.sendSelfInfo()
             }
+            print("Connected: \(peerID.displayName)")
+        case .connecting:
+            print("Connecting: \(peerID.displayName)")
+        case .notConnected:
+            print("Not Connected: \(peerID.displayName)")
+        default:
+            print("Unknown state received: \(peerID.displayName)")
         }
+        
+        
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
