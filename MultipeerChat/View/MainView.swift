@@ -7,54 +7,76 @@
 //
 
 import SwiftUI
+import Observation
 
 struct MainView: View {
     
-    @State private var advertiserShown = false
     @State private var actionSheetShown = false
-    @State private var browserShown = false
-    @ObservedObject private var chatsViewModel = ChatsViewModel()
+    @State private var chatsViewModel = ChatsViewModel()
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
-                List(chatsViewModel.peers) {
-                    peer in
-                    NavigationLink(destination: ChatroomView(multipeerUser: peer)) {
-                        PeerChatCell(multipeerUser: peer)
+                List {
+                    ForEach(chatsViewModel.peers) { peer in
+                        let chatroomViewDestination = ChatroomView(multipeerUser: peer)
+                        NavigationLink(destination: chatroomViewDestination) {
+                            PeerChatCell(multipeerUser: peer, sessionActive: SessionManager.shared.getMutualSession(with: chatroomViewDestination.companion.mcPeerID) != nil)
+                        }
+                    }.onDelete { indexSet in
+                        indexSet.forEach { index in
+                            self.chatsViewModel.peerRemoved(at: index)
+                            
+                        }
                     }
+                }.refreshable {
+                    self.chatsViewModel.updatePeers()
                 }
-                NavigationLink(destination: BrowserView(), isActive: self.$browserShown) {
-                    EmptyView()
-                }.hidden()
-                NavigationLink(destination: AdvertiserView(), isActive: self.$advertiserShown) {
-                    EmptyView()
-                }.hidden()
             }
             .navigationBarTitle("Chats")
-            .navigationBarItems(trailing:
-                Button(action: {
-                    self.actionSheetShown.toggle()
-                }) {
-                    Image(systemName: "plus")
-            }).onAppear {
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    if let profilePic = UserMP.shared.profilePicture {
+                        Image(uiImage: profilePic)
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                            .clipShape(.circle)
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        self.chatsViewModel.removeAllPeers()
+                    } label: {
+                        Image(systemName: "x.circle")
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        self.actionSheetShown.toggle()
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+                
+            }
+            .onAppear {
                 self.reportOnAppear()
             }
-        }.actionSheet(isPresented: self.$actionSheetShown) {
-            ActionSheet(title: Text("Choose an option"), buttons: [.default(Text("Host a session")) {
-                print("Hosting clicked")
-                self.advertiserShown.toggle()
-                }, .default(Text("Join a session")) {
-                    print("Browsing clicked")
-                    self.browserShown.toggle()
-                }, .cancel()])
+            .confirmationDialog("Choose an Option", isPresented: $actionSheetShown) {
+                NavigationLink("Host a session") {
+                    AdvertiserView()
+                }
+                NavigationLink("Join a session") {
+                    BrowserView()
+                }
+            } message: {
+                Text("Choose an Option")
+            }
         }
     }
     
     func reportOnAppear() {
         print("Reloading peers")
-        self.advertiserShown = false
-        self.browserShown = false
         self.chatsViewModel.updatePeers()
     }
 }

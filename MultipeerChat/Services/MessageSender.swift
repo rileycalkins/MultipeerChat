@@ -18,13 +18,13 @@ class MessageSender {
         self.sessionDelegate = sessionDelegate
     }
     
-    private lazy var userAsCompanion: CompanionMP? = {
+    lazy var userAsCompanion: CompanionMP? = {
         guard let userPeer = UserMP.shared.peerID, let userID = UserMP.shared.id else { return nil }
         let userAsCompanion = CompanionMP(mcPeerID: userPeer, picture: UserMP.shared.profilePicture, id: userID)
         return userAsCompanion
     }()
     
-    private var session: MCSession? {
+    var session: MCSession? {
         let session = SessionManager.shared.getMutualSession(with: companionPeer)
         session?.delegate = sessionDelegate
         return session

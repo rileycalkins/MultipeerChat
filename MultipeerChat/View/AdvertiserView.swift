@@ -12,26 +12,31 @@ struct AdvertiserView: View {
     
     @Environment(\.presentationMode) private var presentationMode
     @State private var isAnimating = true
-    @ObservedObject var advertiserVM = AdvertiserViewModel()
+    @Environment(AdvertiserViewModel.self) var advertiserVM: AdvertiserViewModel
     
     var body: some View {
         VStack {
+            @Bindable var advertiserVMBindable = advertiserVM
             ActivityIndicator(style: .large, animate: $isAnimating)
-                .alert(isPresented: $advertiserVM.shouldShowConnectAlert) {
-                    Alert(title: Text("Invitation"), message: Text(advertiserVM.peerWantsToConnectMessage), primaryButton: .default(Text("Accept"), action: {
+                .alert(isPresented: $advertiserVMBindable.shouldShowConnectAlert) {
+                    Alert(title: Text("Invitation"), message: Text(advertiserVMBindable.peerWantsToConnectMessage), primaryButton: .default(Text("Accept"), action: {
                         self.advertiserVM.replyToRequest(isAccepted: true)
                     }), secondaryButton: .cancel(Text("Decline"), action: {
                         self.advertiserVM.replyToRequest(isAccepted: false)
                     }))
             }
             Text("Waiting for peers...")
-                .alert(isPresented: $advertiserVM.didNotStartAdvertising) {
-                    Alert(title: Text("Hosting Error"), message: Text(advertiserVM.startErrorMessage), dismissButton: .default( Text("OK"), action: {
+                .alert(isPresented: $advertiserVMBindable.didNotStartAdvertising) {
+                    Alert(title: Text("Hosting Error"),
+                          message: Text(advertiserVM.startErrorMessage),
+                          dismissButton: .default( Text("OK"), action: {
                         self.presentationMode.wrappedValue.dismiss()
                     }))
             }
-            EmptyView().alert(isPresented: $advertiserVM.showPeerConnectedAlert) {
-                Alert(title: Text(""), message: Text(advertiserVM.peerConnectedSuccessfully), dismissButton: .default( Text("OK")))
+            EmptyView().alert(isPresented: $advertiserVMBindable.showPeerConnectedAlert) {
+                Alert(title: Text(""),
+                      message: Text(advertiserVM.peerConnectedSuccessfully),
+                      dismissButton: .default( Text("OK")))
             }
         }.navigationBarTitle(Text("Hosting"))
         .onAppear {

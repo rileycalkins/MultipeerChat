@@ -7,12 +7,14 @@
 //
 
 import MultipeerConnectivity
+import Observation
 
-class BrowserViewModel: NSObject, ObservableObject {
+@Observable
+class BrowserViewModel: NSObject {
     
-    @Published var browsedPeers = [BrowsedPeer]()
-    @Published var didNotStartBrowsing = false
-    @Published var couldntConnect = false
+    var browsedPeers = [BrowsedPeer]()
+    var didNotStartBrowsing = false
+    var couldntConnect = false
     var startErrorMessage = ""
     var couldntConnectMessage = ""
     private let browser: MCNearbyServiceBrowser

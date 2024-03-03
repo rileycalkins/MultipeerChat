@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,7 +12,7 @@
 		542C58E624250BB2006AAE74 /* BrowserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542C58E524250BB2006AAE74 /* BrowserView.swift */; };
 		542C58E8242511E2006AAE74 /* MultipeerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542C58E7242511E2006AAE74 /* MultipeerConstants.swift */; };
 		543C77F0242E67F800D50B1D /* ChatroomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 543C77EF242E67F800D50B1D /* ChatroomView.swift */; };
-		54408F7F248572DB001E10F1 /* PeerAdded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54408F7E248572DB001E10F1 /* PeerAdded.swift */; };
+		54408F7F248572DB001E10F1 /* PeerOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54408F7E248572DB001E10F1 /* PeerOperations.swift */; };
 		545B0EB724BB9D6300A5DB60 /* MoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 545B0EB624BB9D6300A5DB60 /* MoreViewModel.swift */; };
 		546064EB24252790003415AA /* AdvertiserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546064EA24252790003415AA /* AdvertiserView.swift */; };
 		546064ED24252B63003415AA /* AdvertiserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546064EC24252B63003415AA /* AdvertiserViewModel.swift */; };
@@ -25,7 +25,7 @@
 		546D707A2412EAF20005AA27 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546D70792412EAF20005AA27 /* ImagePicker.swift */; };
 		54776BA3242CCEE0001CE8E4 /* PeerChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54776BA2242CCEE0001CE8E4 /* PeerChatCell.swift */; };
 		54776BA5242CD469001CE8E4 /* Image+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54776BA4242CD469001CE8E4 /* Image+extension.swift */; };
-		5479194A242D5BE00083574B /* MessageAdded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54791949242D5BE00083574B /* MessageAdded.swift */; };
+		5479194A242D5BE00083574B /* MessageOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54791949242D5BE00083574B /* MessageOperations.swift */; };
 		5481C69B2422B9E700D0A745 /* BrowserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5481C69A2422B9E700D0A745 /* BrowserViewModel.swift */; };
 		54A05858242A887700336878 /* MessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A05857242A887700336878 /* MessageSender.swift */; };
 		54A91C1D248AC54600C0B7A8 /* MultipeerFrameworkMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A91C1C248AC54600C0B7A8 /* MultipeerFrameworkMessage.swift */; };
@@ -56,12 +56,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2147554D2B93877200321D5B /* ConversionToGroupsGPT.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ConversionToGroupsGPT.md; sourceTree = "<group>"; };
 		541F028624C1EB760029F156 /* UserDataRemoval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataRemoval.swift; sourceTree = "<group>"; };
 		542553A7241AE4F400E00962 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		542C58E524250BB2006AAE74 /* BrowserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserView.swift; sourceTree = "<group>"; };
 		542C58E7242511E2006AAE74 /* MultipeerConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerConstants.swift; sourceTree = "<group>"; };
 		543C77EF242E67F800D50B1D /* ChatroomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatroomView.swift; sourceTree = "<group>"; };
-		54408F7E248572DB001E10F1 /* PeerAdded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerAdded.swift; sourceTree = "<group>"; };
+		54408F7E248572DB001E10F1 /* PeerOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerOperations.swift; sourceTree = "<group>"; };
 		545B0EB624BB9D6300A5DB60 /* MoreViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewModel.swift; sourceTree = "<group>"; };
 		546064EA24252790003415AA /* AdvertiserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertiserView.swift; sourceTree = "<group>"; };
 		546064EC24252B63003415AA /* AdvertiserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvertiserViewModel.swift; sourceTree = "<group>"; };
@@ -76,7 +77,7 @@
 		546D70792412EAF20005AA27 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		54776BA2242CCEE0001CE8E4 /* PeerChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerChatCell.swift; sourceTree = "<group>"; };
 		54776BA4242CD469001CE8E4 /* Image+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+extension.swift"; sourceTree = "<group>"; };
-		54791949242D5BE00083574B /* MessageAdded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAdded.swift; sourceTree = "<group>"; };
+		54791949242D5BE00083574B /* MessageOperations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageOperations.swift; sourceTree = "<group>"; };
 		5481C69A2422B9E700D0A745 /* BrowserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewModel.swift; sourceTree = "<group>"; };
 		54A05857242A887700336878 /* MessageSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSender.swift; sourceTree = "<group>"; };
 		54A91C1C248AC54600C0B7A8 /* MultipeerFrameworkMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerFrameworkMessage.swift; sourceTree = "<group>"; };
@@ -149,6 +150,7 @@
 		546D7062241296DB0005AA27 /* MultipeerChat */ = {
 			isa = PBXGroup;
 			children = (
+				2147554D2B93877200321D5B /* ConversionToGroupsGPT.md */,
 				546D7063241296DB0005AA27 /* AppDelegate.swift */,
 				546D7065241296DB0005AA27 /* SceneDelegate.swift */,
 				882E7D372416577A00E49BF6 /* Model */,
@@ -182,8 +184,8 @@
 		5479194B242D5C440083574B /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				54791949242D5BE00083574B /* MessageAdded.swift */,
-				54408F7E248572DB001E10F1 /* PeerAdded.swift */,
+				54791949242D5BE00083574B /* MessageOperations.swift */,
+				54408F7E248572DB001E10F1 /* PeerOperations.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -301,8 +303,9 @@
 		546D7058241296DB0005AA27 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1520;
 				ORGANIZATIONNAME = "Hesham Salama";
 				TargetAttributes = {
 					546D705F241296DB0005AA27 = {
@@ -357,7 +360,7 @@
 				54FF11A324328C6E0062010D /* ImagePickerCoordinator.swift in Sources */,
 				54FB141F242FA11500DF93AF /* ContentTextMessageView.swift in Sources */,
 				8802D9342417A45D00E555D8 /* CoreDataHandler.swift in Sources */,
-				5479194A242D5BE00083574B /* MessageAdded.swift in Sources */,
+				5479194A242D5BE00083574B /* MessageOperations.swift in Sources */,
 				543C77F0242E67F800D50B1D /* ChatroomView.swift in Sources */,
 				546D7064241296DB0005AA27 /* AppDelegate.swift in Sources */,
 				54776BA3242CCEE0001CE8E4 /* PeerChatCell.swift in Sources */,
@@ -376,7 +379,7 @@
 				54FB141B242F7FCD00DF93AF /* CoreDataSortDescriptor.swift in Sources */,
 				54FB1429242FC1DE00DF93AF /* ChatroomViewModel.swift in Sources */,
 				546064ED24252B63003415AA /* AdvertiserViewModel.swift in Sources */,
-				54408F7F248572DB001E10F1 /* PeerAdded.swift in Sources */,
+				54408F7F248572DB001E10F1 /* PeerOperations.swift in Sources */,
 				54A91C1D248AC54600C0B7A8 /* MultipeerFrameworkMessage.swift in Sources */,
 				546D7066241296DB0005AA27 /* SceneDelegate.swift in Sources */,
 				546064EB24252790003415AA /* AdvertiserView.swift in Sources */,
@@ -410,6 +413,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -432,6 +436,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -442,6 +447,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -456,7 +462,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -470,6 +476,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -492,6 +499,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -502,6 +510,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -510,7 +519,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -524,17 +533,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"MultipeerChat/Preview Content\"";
-				DEVELOPMENT_TEAM = FPV8AMUR2Q;
+				DEVELOPMENT_TEAM = 6P8KRE82L9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = MultipeerChat/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = salama.hesham.MultipeerChat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ontogenesis.MultipeerChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -544,17 +556,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"MultipeerChat/Preview Content\"";
-				DEVELOPMENT_TEAM = FPV8AMUR2Q;
+				DEVELOPMENT_TEAM = 6P8KRE82L9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = MultipeerChat/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = salama.hesham.MultipeerChat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ontogenesis.MultipeerChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

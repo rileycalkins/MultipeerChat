@@ -21,7 +21,12 @@ struct BrowsedPeerCell: View {
                 Text(buttonText)
             }.foregroundColor(.gray).padding(.leading)
             Spacer()
-            Text(statusText).foregroundColor(.gray).padding(.trailing)
+            Text(statusText)
+                .foregroundColor(.gray)
+                .padding(.trailing)
+            Image(systemName: "checkmark.circle")
+                .foregroundStyle(.green)
+            
         }
     }
 }

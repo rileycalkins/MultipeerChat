@@ -6,6 +6,6 @@
 //  Copyright © 2020 Hesham Salama. All rights reserved.
 //
 
-protocol MessageAdded: class {
+protocol MessageOperations: AnyObject {
     func added(message: MPMessage)
 }

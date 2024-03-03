@@ -7,6 +7,7 @@
 //
 
 import MultipeerConnectivity
+import SwiftData
 
 class UserMP {
     static let shared = UserMP()

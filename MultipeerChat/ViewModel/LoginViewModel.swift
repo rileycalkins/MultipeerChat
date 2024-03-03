@@ -8,12 +8,15 @@
 
 import UIKit
 import MultipeerConnectivity
+import Observation
 
-class LoginViewModel: ObservableObject {
+
+@Observable
+class LoginViewModel {
     
-    @Published var name = ""
-    @Published var isLoggedIn = false
-    @Published var isErrorShown = false
+    var name = ""
+    var isLoggedIn = false
+    var isErrorShown = false
     private static let minCharsCountForUserName = 3
     let errorMessage = "Please enter a valid username (no spaces and should have more than \(minCharsCountForUserName) characters)"
     

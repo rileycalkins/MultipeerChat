@@ -10,13 +10,17 @@ import SwiftUI
 
 struct StartView: View {
     
-    @EnvironmentObject var loginViewModel : LoginViewModel
+    @Environment(LoginViewModel.self) var loginViewModel : LoginViewModel
     
     var body: some View {
-        if loginViewModel.isLoggedIn {
-            return AnyView(TabBarView())
-        } else {
-            return AnyView(ProfileSetupView())
+        Group {
+            if loginViewModel.isLoggedIn {
+                AnyView(TabBarView())
+                    .environment(AdvertiserViewModel())
+                    .environment(BrowserViewModel())
+            } else {
+                AnyView(ProfileSetupView())
+            }
         }
     }
 }

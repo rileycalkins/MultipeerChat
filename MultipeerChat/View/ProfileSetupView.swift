@@ -7,36 +7,69 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct ProfileSetupView: View {
-    @EnvironmentObject private var loginViewModel : LoginViewModel
-    @State private var showImagePicker = false
+    @Environment(LoginViewModel.self) var loginViewModel : LoginViewModel
+//    @State private var showImagePicker = false
     @State private var showErrorAlert = false
     @State private var uiimage = UIImage(named: "defaultProfile")
+    @State var photoPickerItem: PhotosPickerItem?
+    
+    func processImage() {
+        Task {
+            if let photoPickItem = photoPickerItem, let image = await pickerImg(pickerPic: photoPickItem), let uiImage = await image.getUIImage(newSize: CGSize(width: 100, height: 130)) {
+                DispatchQueue.main.async {
+                    uiimage = uiImage
+                }
+            }
+        }
+    }
+    
+    func pickerImg(pickerPic: PhotosPickerItem) async -> Image? {
+        do {
+            guard let photo = try await pickerPic.loadTransferable(type: Image.self) else {
+                return nil
+            }
+            return photo
+        } catch {
+            print("Error loading image to transferrable")
+            return nil
+        }
+    }
     
     var body: some View {
-        VStack(alignment: .center, spacing: 16) {
-            Button(action: {
-                self.showImagePicker.toggle()
-            }) {
-                DefaultImageConstructor.get(uiimage: uiimage)
-                    .peerImageModifier().frame(width: 100.0, height: 100.0)
+        Group {
+            @Bindable var loginViewModelBindable = loginViewModel
+            VStack(alignment: .center, spacing: 16) {
+                PhotosPicker(selection: $photoPickerItem) {
+                    DefaultImageConstructor.get(uiimage: uiimage)
+                        .peerImageModifier().frame(width: 150.0, height: 150.0)
+                }
+                TextField("Enter your name here", text: $loginViewModelBindable.name)
+                    .background(Color.clear)
+                    .multilineTextAlignment(.center)
+                    .onSubmit {
+                        attemptLogin()
+                    }
+                Button(action: {
+                    attemptLogin()
+                }) {
+                    Text("Continue")
+                }
+            }.padding(.vertical, -150)
+            .alert(isPresented: $loginViewModelBindable.isErrorShown) {
+                Alert(title: Text("Error"),
+                      message: Text(loginViewModel.errorMessage))
             }
-            TextField("Enter your name here", text: $loginViewModel.name)
-                .background(Color.clear)
-                .multilineTextAlignment(.center)
-            Button(action: {
-                self.loginViewModel.attemptRegisteration(image: self.uiimage)
-            }) {
-                Text("Continue")
+            .onChange(of: photoPickerItem) { oldValue, newValue in
+                processImage()
             }
-        }.padding(.vertical, -150)
-        .sheet(isPresented: $showImagePicker) {
-            ImagePicker(image: self.$uiimage, takePhoto: false)
-        }.alert(isPresented: $loginViewModel.isErrorShown) {
-            Alert(title: Text("Error"),
-                  message: Text(loginViewModel.errorMessage))
         }
+    }
+    
+    func attemptLogin() {
+        self.loginViewModel.attemptRegisteration(image: self.uiimage)
     }
 }
 

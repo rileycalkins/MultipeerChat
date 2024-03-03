@@ -7,11 +7,13 @@
 //
 
 import MultipeerConnectivity
+import Observation
 
+@Observable
 class AdvertiserViewModel: NSObject, ObservableObject {
-    @Published var didNotStartAdvertising = false
-    @Published var shouldShowConnectAlert = false
-    @Published var showPeerConnectedAlert = false
+    var didNotStartAdvertising = false
+    var shouldShowConnectAlert = false
+    var showPeerConnectedAlert = false
     var startErrorMessage = ""
     var peerWantsToConnectMessage = ""
     var peerConnectedSuccessfully = ""

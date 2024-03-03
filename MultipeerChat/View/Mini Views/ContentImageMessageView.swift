@@ -15,9 +15,13 @@ struct ContentImageMessageView: View {
     
     var body: some View {
         Image(uiImage: messageImage)
-            .padding(10)
+            .clipShape(.rect(cornerRadius: 10))
+            .padding(.horizontal)
+            .padding(.top, 8)
+            .padding(.bottom, 12)
             .background(isCurrentUser ? Color.blue : Color(UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1.0)))
             .cornerRadius(10)
             .frame(width: 150, height: 150)
+            
     }
 }

@@ -7,16 +7,20 @@
 //
 
 import MultipeerConnectivity
+import Observation
+import PhotosUI
 
-class ChatroomViewModel: NSObject, ObservableObject {
+@Observable
+class ChatroomViewModel: NSObject {
     
+    var authorizationStatus: PHAuthorizationStatus = .notDetermined
     let companion : CompanionMP
-    @Published var messages = [MPMessage]()
-    @Published var errorAlertShown = false
-    @Published var messageText = ""
+    var messages = [MPMessage]()
+    var errorAlertShown = false
+    var messageText = ""
     var errorMessage = ""
-    private var currentPage = 0
-    private var messageSender : MessageSender
+    var currentPage = 0
+    var messageSender : MessageSender
     
     init(peer: CompanionMP) {
         self.companion = peer
@@ -93,7 +97,7 @@ extension ChatroomViewModel: MCSessionDelegate {
     }
 }
 
-extension ChatroomViewModel : MessageAdded {
+extension ChatroomViewModel : MessageOperations {
     func added(message: MPMessage) {
         DispatchQueue.main.async { [weak self] in
             if (message.senderPeerID == UserMP.shared.id && message.receiverPeerID == self?.companion.id) || (message.receiverPeerID == UserMP.shared.id && message.senderPeerID == self?.companion.id) {

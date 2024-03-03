@@ -8,10 +8,11 @@
 
 import SwiftUI
 import MultipeerConnectivity
+import Observation
 
-class ChatsViewModel: ObservableObject {
-    @Published var peers = [CompanionMP]()
-    
+@Observable
+class ChatsViewModel {
+    var peers = [CompanionMP]()
     init() {
         CompanionMP.delegate = self
     }
@@ -22,10 +23,25 @@ class ChatsViewModel: ObservableObject {
     }
 }
 
-extension ChatsViewModel: PeerAdded {
+extension ChatsViewModel: PeerOperations {
     func added(peer: CompanionMP) {
         DispatchQueue.main.async { [weak self] in
             self?.peers.append(peer)
+            self?.updatePeers()
+        }
+    }
+    
+    func removeAllPeers() {
+        DispatchQueue.main.async { [weak self] in
+            CompanionMP.removeAll()
+            self?.updatePeers()
+        }
+    }
+    
+    func peerRemoved(at index: Int) {
+        DispatchQueue.main.async { [weak self] in
+            CompanionMP.removePeer(at: index)
+            self?.updatePeers()
         }
     }
 }

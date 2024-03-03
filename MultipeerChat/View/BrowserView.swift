@@ -10,35 +10,40 @@ import SwiftUI
 
 struct BrowserView: View {
     @Environment(\.presentationMode) private var presentationMode
-    @ObservedObject private var browserVM = BrowserViewModel()
+    @Environment(BrowserViewModel.self) var browserVM: BrowserViewModel
     
     var body: some View {
-        List {
-            Section(header: Text("Available Peers")) {
-                ForEach(browserVM.availableAndConnectingPeers) { browsedPeer in
-                    BrowsedPeerCell(buttonText: browsedPeer.peerID.displayName, statusText: browsedPeer.currentStatus.description) {
-                        self.browserVM.peerClicked(browsedPeer: browsedPeer)
+        Group {
+            @Bindable var browserVMBindable = browserVM
+            List {
+                Section(header: Text("Available Peers")) {
+                    ForEach(browserVM.availableAndConnectingPeers) { browsedPeer in
+                        BrowsedPeerCell(buttonText: browsedPeer.peerID.displayName,
+                                        statusText: browsedPeer.currentStatus.description) {
+                            self.browserVM.peerClicked(browsedPeer: browsedPeer)
+                        }
                     }
                 }
-            }
-            Section(header: Text("Connected Peers")) {
-                ForEach(browserVM.connectedPeers, id: \.id) { peer in
-                    BrowsedPeerCell(buttonText: peer.peerID.displayName, statusText: peer.currentStatus.description)
+                Section(header: Text("Connected Peers")) {
+                    ForEach(browserVM.connectedPeers, id: \.id) { peer in
+                        BrowsedPeerCell(buttonText: peer.peerID.displayName,
+                                        statusText: peer.currentStatus.description)
+                    }
+                }.alert(isPresented: $browserVMBindable.couldntConnect) {
+                    Alert(title: Text("Error"), message: Text(browserVM.couldntConnectMessage), dismissButton: .default(Text("OK")))
                 }
-            }.alert(isPresented: $browserVM.couldntConnect) {
-                Alert(title: Text("Error"), message: Text(browserVM.couldntConnectMessage), dismissButton: .default(Text("OK")))
+            }.listStyle(GroupedListStyle())
+            .navigationBarTitle(Text("Peer Search"))
+            .onAppear {
+                self.browserVM.startBrowsing()
             }
-        }.listStyle(GroupedListStyle())
-        .navigationBarTitle(Text("Peer Search"))
-        .onAppear {
-            self.browserVM.startBrowsing()
-        }
-        .onDisappear {
-            self.browserVM.stopBrowsing()
-        }.alert(isPresented: $browserVM.didNotStartBrowsing) {
-            Alert(title: Text("Search Error"), message: Text(browserVM.startErrorMessage), dismissButton: .default( Text("OK"), action: {
-                self.presentationMode.wrappedValue.dismiss()
-            }))
+            .onDisappear {
+                self.browserVM.stopBrowsing()
+            }.alert(isPresented: $browserVMBindable.didNotStartBrowsing) {
+                Alert(title: Text("Search Error"), message: Text(browserVM.startErrorMessage), dismissButton: .default( Text("OK"), action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }))
+            }
         }
     }
 }

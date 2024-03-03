@@ -11,13 +11,12 @@ import UIKit
 import CoreData
 
 struct CompanionMP {
-    
     let mcPeerID: MCPeerID
     let picture: UIImage?
     private(set) var uuid: UUID
     private static let tableName = "Companion"
     private static let coreDataHandler = CoreDataHandler(tableName: tableName)
-    weak static var delegate: PeerAdded?
+    weak static var delegate: PeerOperations?
     
     init(mcPeerID: MCPeerID, picture: UIImage?, id: UUID) {
         self.mcPeerID = mcPeerID
@@ -115,6 +114,17 @@ extension CompanionMP {
             return
         }
         coreDataHandler.remove(managedObjects: managedObjects)
+        self.coreDataHandler.saveChanges()
+    }
+    
+    static func removePeer(at index: Int) {
+        guard let managedObjects = coreDataHandler.getData() else {
+            return
+        }
+        let objectToDelete = managedObjects[index]
+        let arrayToDelete:[NSManagedObject] = [objectToDelete]
+        coreDataHandler.remove(managedObjects: arrayToDelete)
+        self.coreDataHandler.saveChanges()
     }
 }
 

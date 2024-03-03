@@ -95,6 +95,14 @@ class CoreDataHandler {
         }
     }
     
+    func saveChanges() {
+        do {
+            try context.save()
+        } catch {
+            print("Context not saved")
+        }
+    }
+    
     func remove(managedObjects: [NSManagedObject]) {
         managedObjects.forEach {
             context.delete($0)

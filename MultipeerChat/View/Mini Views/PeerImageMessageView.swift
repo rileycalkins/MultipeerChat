@@ -22,7 +22,9 @@ struct PeerImageMessageView : View {
     var body: some View {
         HStack(alignment: .bottom, spacing: 15) {
             if !isCurrentUser {
-                self.userImage.peerImageModifier().frame(width: 40, height: 40, alignment: .center)
+                self.userImage.peerImageModifier()
+                    .frame(width: 40, height: 40, alignment: .center)
+                
             } else {
                 Spacer()
             }

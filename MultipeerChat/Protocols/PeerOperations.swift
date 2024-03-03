@@ -6,6 +6,9 @@
 //  Copyright © 2020 Hesham Salama. All rights reserved.
 //
 
-protocol PeerAdded: class {
+protocol PeerOperations: AnyObject {
     func added(peer: CompanionMP)
+    func removeAllPeers()
+    func peerRemoved(at index: Int)
 }
+

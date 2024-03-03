@@ -18,7 +18,7 @@ class MPMessage: Identifiable {
     private static let senderPeerHashKey = "senderHashValue"
     private static let recipientPeerHashKey = "recipientHashValue"
     private static let coreDataHandler = CoreDataHandler(tableName: MPMessage.tableName)
-    weak static var delegate: MessageAdded?
+    weak static var delegate: MessageOperations?
     let data: Data
     let unixTime: TimeInterval
     let senderPeerID: UUID

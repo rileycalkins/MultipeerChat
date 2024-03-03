@@ -10,7 +10,7 @@ import SwiftUI
 
 struct MoreView: View {
     private let moreVM = MoreViewModel()
-    @EnvironmentObject var loginViewModel : LoginViewModel
+    @Environment(LoginViewModel.self) var loginViewModel : LoginViewModel
     @State private var logoutClicked = false
     
     init() {
