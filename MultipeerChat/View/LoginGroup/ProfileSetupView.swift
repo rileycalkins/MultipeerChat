@@ -11,14 +11,15 @@ import PhotosUI
 
 struct ProfileSetupView: View {
     @Environment(LoginViewModel.self) var loginViewModel : LoginViewModel
-//    @State private var showImagePicker = false
     @State private var showErrorAlert = false
     @State private var uiimage = UIImage(named: "defaultProfile")
     @State var photoPickerItem: PhotosPickerItem?
     
     func processImage() {
         Task {
-            if let photoPickItem = photoPickerItem, let image = await pickerImg(pickerPic: photoPickItem), let uiImage = await image.getUIImage(newSize: CGSize(width: 100, height: 130)) {
+            if let photoPickItem = photoPickerItem, 
+                let image = await pickerImg(pickerPic: photoPickItem), 
+                let uiImage = await image.getUIImage(newSize: CGSize(width: 150, height: 150)) {
                 DispatchQueue.main.async {
                     uiimage = uiImage
                 }

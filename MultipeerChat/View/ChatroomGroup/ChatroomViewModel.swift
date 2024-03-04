@@ -100,7 +100,10 @@ extension ChatroomViewModel: MCSessionDelegate {
 extension ChatroomViewModel : MessageOperations {
     func added(message: MPMessage) {
         DispatchQueue.main.async { [weak self] in
-            if (message.senderPeerID == UserMP.shared.id && message.receiverPeerID == self?.companion.id) || (message.receiverPeerID == UserMP.shared.id && message.senderPeerID == self?.companion.id) {
+            if (message.senderPeerID == UserMP.shared.id 
+                && message.receiverPeerID == self?.companion.id) 
+                || (message.receiverPeerID == UserMP.shared.id
+                && message.senderPeerID == self?.companion.id) {
                 self?.messages.append(message)
             }
         }

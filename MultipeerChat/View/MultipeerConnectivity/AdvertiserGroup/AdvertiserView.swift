@@ -12,39 +12,34 @@ struct AdvertiserView: View {
     
     @Environment(\.presentationMode) private var presentationMode
     @State private var isAnimating = true
-    @Environment(AdvertiserViewModel.self) var advertiserVM: AdvertiserViewModel
+    @Environment(MultipeerSessionManager.self) var multipeerSessionManager: MultipeerSessionManager
     
     var body: some View {
         VStack {
-            @Bindable var advertiserVMBindable = advertiserVM
+            @Bindable var multipeerSessionManagerBindable = multipeerSessionManager
             ActivityIndicator(style: .large, animate: $isAnimating)
-                .alert(isPresented: $advertiserVMBindable.shouldShowConnectAlert) {
-                    Alert(title: Text("Invitation"), message: Text(advertiserVMBindable.peerWantsToConnectMessage), primaryButton: .default(Text("Accept"), action: {
-                        self.advertiserVM.replyToRequest(isAccepted: true)
+                .alert(isPresented: $multipeerSessionManagerBindable.shouldShowConnectAlert) {
+                    Alert(title: Text("Invitation"), message: Text(multipeerSessionManagerBindable.peerWantsToConnectMessage), primaryButton: .default(Text("Accept"), action: {
+                        self.multipeerSessionManager.replyToRequest(isAccepted: true)
                     }), secondaryButton: .cancel(Text("Decline"), action: {
-                        self.advertiserVM.replyToRequest(isAccepted: false)
+                        self.multipeerSessionManager.replyToRequest(isAccepted: false)
                     }))
             }
             Text("Waiting for peers...")
-                .alert(isPresented: $advertiserVMBindable.didNotStartAdvertising) {
+                .alert(isPresented: $multipeerSessionManagerBindable.didNotStartAdvertising) {
                     Alert(title: Text("Hosting Error"),
-                          message: Text(advertiserVM.startErrorMessage),
+                          message: Text(multipeerSessionManager.startErrorMessage),
                           dismissButton: .default( Text("OK"), action: {
                         self.presentationMode.wrappedValue.dismiss()
                     }))
             }
-            EmptyView().alert(isPresented: $advertiserVMBindable.showPeerConnectedAlert) {
+            EmptyView().alert(isPresented: $multipeerSessionManagerBindable.showPeerConnectedAlert) {
                 Alert(title: Text(""),
-                      message: Text(advertiserVM.peerConnectedSuccessfully),
+                      message: Text(multipeerSessionManager.peerConnectedSuccessfully),
                       dismissButton: .default( Text("OK")))
             }
         }.navigationBarTitle(Text("Hosting"))
-        .onAppear {
-                self.advertiserVM.startAdvertising()
-        }
-        .onDisappear {
-            self.advertiserVM.stopAdvertising()
-        }
+        
     }
 }
 

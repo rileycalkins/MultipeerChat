@@ -13,6 +13,8 @@ class SessionManager: NSObject {
     static let shared = SessionManager()
     private var sessions = [MCSession]()
     
+    
+    
     private override init() {}
     
     var newSession: MCSession {

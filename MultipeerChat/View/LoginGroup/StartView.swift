@@ -16,8 +16,8 @@ struct StartView: View {
         Group {
             if loginViewModel.isLoggedIn {
                 AnyView(TabBarView())
-                    .environment(AdvertiserViewModel())
-                    .environment(BrowserViewModel())
+                    .environment(MultipeerSessionManager())
+                    
             } else {
                 AnyView(ProfileSetupView())
             }

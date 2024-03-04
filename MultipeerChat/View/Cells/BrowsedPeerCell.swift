@@ -9,30 +9,44 @@
 import SwiftUI
 
 struct BrowsedPeerCell: View {
-    let buttonText: String
-    let statusText: String
+    var browsedPeer: BrowsedPeer?
+    var connectedPeer: BrowsedPeer?
     var action: (() -> ())?
     
     var body: some View {
-        HStack {
-            Button(action: {
+        if let browsedPeer = browsedPeer {
+            Button {
                 self.action?()
-            }) {
-                Text(buttonText)
-            }.foregroundColor(.gray).padding(.leading)
-            Spacer()
-            Text(statusText)
-                .foregroundColor(.gray)
-                .padding(.trailing)
-            Image(systemName: "checkmark.circle")
-                .foregroundStyle(.green)
-            
+            } label: {
+                HStack {
+                    VStack(alignment: .center) {
+                        Text(browsedPeer.peerID.displayName)
+                        Text(browsedPeer.currentStatus.description)
+                        Image(systemName: browsedPeer.currentStatus.imageString)
+                    }.foregroundColor(.gray)
+                }.padding()
+            }.background {
+                browsedPeer.currentStatus.textColor
+                    .clipShape(.rect(cornerRadius: 10))
+            }
         }
+        if let connectedPeer = connectedPeer {
+            Button {
+                self.action?()
+            } label: {
+                HStack {
+                    VStack(alignment: .center) {
+                        Text(connectedPeer.peerID.displayName)
+                        Text(connectedPeer.currentStatus.description)
+                        Image(systemName: connectedPeer.currentStatus.imageString)
+                    }.foregroundColor(.gray)
+                }.padding()
+            }.background {
+                connectedPeer.currentStatus.textColor
+                    .clipShape(.rect(cornerRadius: 10))
+            }
+        }
+        
     }
 }
 
-struct BrowsedPeerCell_Previews: PreviewProvider {
-    static var previews: some View {
-        BrowsedPeerCell(buttonText: "Peer1", statusText: "Connecting")
-    }
-}

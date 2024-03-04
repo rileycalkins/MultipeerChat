@@ -19,11 +19,33 @@ struct BrowsedPeer: Identifiable {
         var description: String {
             switch self {
             case .connected:
-                return ""
+                return "Connected"
             case .connecting:
                 return "Connecting..."
             case .available:
-                return ""
+                return "Available"
+            }
+        }
+        
+        var textColor: Color {
+            switch self {
+            case .connected:
+                return.green
+            case .connecting:
+                return .cyan
+            case .available:
+                return .yellow
+            }
+        }
+        
+        var imageString: String {
+            switch self {
+            case .connected:
+                return "checkmark.circle"
+            case .connecting:
+                return "point.3.filled.connected.trianglepath.dotted"
+            case .available:
+                return "point.3.connected.trianglepath.dotted"
             }
         }
     }

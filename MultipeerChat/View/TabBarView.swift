@@ -9,11 +9,12 @@
 import SwiftUI
 
 struct TabBarView: View {
-    private let mainView = MainView()
+    @Environment(MultipeerSessionManager.self) var multipeerSessionManager: MultipeerSessionManager
+    private let chatsView = ChatsView()
     private let moreView = MoreView()
     var body: some View {
         TabView {
-            mainView
+            chatsView
                 .tabItem {
                     Image(systemName: "bubble.left.and.bubble.right.fill")
                     Text("Chat")
@@ -23,6 +24,9 @@ struct TabBarView: View {
                     Image(systemName: "ellipsis.circle.fill")
                     Text("More")
             }
+        }.onAppear {
+            multipeerSessionManager.startBrowsing()
+            multipeerSessionManager.startAdvertising()
         }
     }
 }
