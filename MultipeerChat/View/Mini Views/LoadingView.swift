@@ -50,13 +50,12 @@ class LoadingState {
             .autoconnect()
             .prefix(10) // Runs for 10 seconds
             .sink { [weak self] _ in
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self?.message = success ? "Success" : "Failure"
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 9) {
+//                        self?.message = success ? "Success" : "Failure"
                         self?.isActive = false
                         self?.progress = 0
                     }
-                }
+//                }
             } receiveValue: { [weak self] _ in
                 guard let self = self, self.progress < 1 else { return }
                 self.progress += 1

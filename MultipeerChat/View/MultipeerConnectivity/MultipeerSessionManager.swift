@@ -206,6 +206,7 @@ extension MultipeerSessionManager: MCSessionDelegate {
             case .connecting:
                 print("Connecting to \(peerID.displayName)")
                 self?.setStatus(for: peerID, status: .connecting)
+                
             case .connected:
                 print("Connected to \(peerID.displayName)")
                 self?.setStatus(for: peerID, status: .connected)
