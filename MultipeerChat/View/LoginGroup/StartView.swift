@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct StartView: View {
-    
     @Environment(LoginViewModel.self) var loginViewModel : LoginViewModel
     
     var body: some View {
@@ -17,7 +16,6 @@ struct StartView: View {
             if loginViewModel.isLoggedIn {
                 AnyView(TabBarView())
                     .environment(MultipeerSessionManager())
-                    
             } else {
                 AnyView(ProfileSetupView())
             }

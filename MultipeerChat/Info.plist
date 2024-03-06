@@ -20,6 +20,13 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app needs your permission to use local network. </string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_h-mpeerchat._tcp</string>
+		<string>_h-mpeerchat._udp</string>
+	</array>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Chat requires access to your photos library</string>
 	<key>NSPhotoLibraryUsageDescription</key>

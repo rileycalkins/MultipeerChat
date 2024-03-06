@@ -9,44 +9,62 @@
 import SwiftUI
 
 struct BrowsedPeerCell: View {
-    var browsedPeer: BrowsedPeer?
-    var connectedPeer: BrowsedPeer?
+    @Binding var peer: BrowsedPeer
     var action: (() -> ())?
     
     var body: some View {
-        if let browsedPeer = browsedPeer {
-            Button {
-                self.action?()
-            } label: {
-                HStack {
-                    VStack(alignment: .center) {
-                        Text(browsedPeer.peerID.displayName)
-                        Text(browsedPeer.currentStatus.description)
-                        Image(systemName: browsedPeer.currentStatus.imageString)
-                    }.foregroundColor(.gray)
-                }.padding()
-            }.background {
-                browsedPeer.currentStatus.textColor
-                    .clipShape(.rect(cornerRadius: 10))
-            }
+        Button {
+            self.action?()
+        } label: {
+            HStack {
+                ZStack {
+                    if peer.currentStatus == .connecting {
+                        Capsule()
+                            .fill(.white)
+                            .frame(width: 60, height: 45)
+                            .overlay {
+                                Capsule()
+                                    .stroke(peer.currentStatus.textColor, lineWidth: 1.5)
+                            }
+                    } else {
+                        Image(systemName: "circle.fill")
+                            .font(.system(size: 45))
+                            .foregroundStyle(.white)
+                            .overlay {
+                                Image(systemName: "circle")
+                                    .font(.system(size: 50))
+                                    .fontWeight(.ultraLight)
+                                    .foregroundStyle(peer.currentStatus.textColor)
+                            }
+                    }
+                    
+                    Image(systemName: peer.currentStatus.imageString)
+                        .font(.title)
+                        .symbolRenderingMode(.hierarchical)
+                        .foregroundStyle(peer.currentStatus.textColor)
+                        .symbolEffect(.variableColor)
+                }
+                
+                
+                VStack(alignment: .leading) {
+                    Text(peer.peerID.displayName)
+                        
+                        .fontWeight(.semibold)
+                    Text(peer.currentStatus.description)
+                        .font(.footnote)
+                }
+            }.foregroundStyle(peer.currentStatus.textColor)
+                .padding(.vertical, 8)
+                .padding(.horizontal)
+        }.background {
+            peer.currentStatus.textColor.opacity(0.2)
+                .clipShape(.rect(cornerRadius: 10))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(peer.currentStatus.textColor, lineWidth: 2)
+                        .padding(1)
+                }
         }
-        if let connectedPeer = connectedPeer {
-            Button {
-                self.action?()
-            } label: {
-                HStack {
-                    VStack(alignment: .center) {
-                        Text(connectedPeer.peerID.displayName)
-                        Text(connectedPeer.currentStatus.description)
-                        Image(systemName: connectedPeer.currentStatus.imageString)
-                    }.foregroundColor(.gray)
-                }.padding()
-            }.background {
-                connectedPeer.currentStatus.textColor
-                    .clipShape(.rect(cornerRadius: 10))
-            }
-        }
-        
     }
 }
 

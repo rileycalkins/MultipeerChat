@@ -25,6 +25,7 @@ struct TabBarView: View {
                     Text("More")
             }
         }.onAppear {
+            multipeerSessionManager.publicPeers = []
             multipeerSessionManager.startBrowsing()
             multipeerSessionManager.startAdvertising()
         }

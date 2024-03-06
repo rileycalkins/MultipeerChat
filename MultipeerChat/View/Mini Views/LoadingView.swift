@@ -37,25 +37,21 @@ struct CircularProgressView: View {
 @Observable
 class LoadingState {
     var isActive: Bool = false
-    var message: String? = nil
     var progress: CGFloat = 0
     var cancellables: Set<AnyCancellable> = []
 
     func startLoading(withSuccess success: Bool) {
         isActive = true
-        message = nil
         progress = 0
         
         Timer.publish(every: 1 / 10, on: .main, in: .common)
             .autoconnect()
             .prefix(10) // Runs for 10 seconds
             .sink { [weak self] _ in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 9) {
-//                        self?.message = success ? "Success" : "Failure"
-                        self?.isActive = false
-                        self?.progress = 0
-                    }
-//                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 9) {
+                    self?.isActive = false
+                    self?.progress = 0
+                }
             } receiveValue: { [weak self] _ in
                 guard let self = self, self.progress < 1 else { return }
                 self.progress += 1
@@ -73,14 +69,6 @@ struct LoadingViewModifier: ViewModifier {
                 if loadingState.isActive {
                     CircularProgressView(progress: loadingState.progress) // Always full circle
                         .frame(width: 100, height: 100)
-                        .transition(.opacity)
-                } else if let message = loadingState.message {
-                    Text(message)
-                        .padding()
-                        .background(Color.secondary)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .transition(.opacity)
                 }
             }
         )
@@ -92,3 +80,6 @@ extension View {
         self.modifier(LoadingViewModifier(loadingState: loadingState))
     }
 }
+
+
+

@@ -10,30 +10,15 @@ import SwiftUI
 import PhotosUI
 import Photos
 
-extension UIScreen{
-   static let screenWidth = UIScreen.main.bounds.size.width
-   static let screenHeight = UIScreen.main.bounds.size.height
-   static let screenSize = UIScreen.main.bounds.size
-}
-
-extension Image {
-    @MainActor
-    func getUIImage(newSize: CGSize) -> UIImage? {
-        let image = resizable()
-            .scaledToFill()
-            .frame(width: newSize.width, height: newSize.height)
-            .clipped()
-        return ImageRenderer(content: image).uiImage
-    }
-}
-
 struct ChatroomView: View {
     let companion: CompanionMP
     var chatroomVM: ChatroomViewModel
+    
     @State var selectedPhotos: [PhotosPickerItem] = []
     @State var presentingPicker: Bool = false
     var maxPhotosCount: Int = 4
     @State var processedImages: [UIImage] = []
+    
     
     
     init(multipeerUser: CompanionMP) {
@@ -49,7 +34,8 @@ struct ChatroomView: View {
             @Bindable var chatroomVMBindable = chatroomVM
             messagesListView
             horizontalMessagePhotoPicker
-            HStack {
+            HStack(spacing: 16) {
+                
                 TextField("Message", text: $chatroomVMBindable.messageText)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .frame(maxHeight: CGFloat(60))
@@ -57,12 +43,21 @@ struct ChatroomView: View {
                         sendMessage()
                     }
                     .disabled(!processedImages.isEmpty)
+                    
                 if chatroomVM.messageText.isEmpty {
                     PhotosPicker(selection: $selectedPhotos, maxSelectionCount: maxPhotosCount, selectionBehavior: .continuousAndOrdered) {
                         Image(systemName: "photo")
                             .font(.largeTitle)
                             .foregroundStyle(.blue)
                     }.photosPickerAccessoryVisibility(.visible, edges: .all)
+                } else {
+                    Button {
+                        chatroomVMBindable.messageText = ""
+                    } label: {
+                        Image(systemName: "x.circle")
+                            .foregroundStyle(.red)
+                            .font(.largeTitle)
+                    }
                 }
                 Button("", systemImage: !chatroomVM.messageText.isEmpty || !processedImages.isEmpty ? "paperplane.circle.fill" : "paperplane.circle") {
                     sendMessage()
@@ -96,40 +91,62 @@ struct ChatroomView: View {
             }
         }
         .navigationTitle(self.chatroomVM.companion.mcPeerID.displayName)
-            .navigationBarTitleDisplayMode(.inline)
-            .onChange(of: selectedPhotos) { oldValue, newValue in
-                if newValue.count == 0 {
-                    processedImages = []
-                    return
-                } else {
-                    processImages()
-                    return
-                }
+        .navigationBarTitleDisplayMode(.inline)
+        .onChange(of: selectedPhotos) { oldValue, newValue in
+            if newValue.count == 0 {
+                processedImages = []
+                return
+            } else {
+                processImages()
+                return
             }
-            .onAppear() {
-                PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
-                    self.chatroomVM.authorizationStatus = status
-                }
-                self.chatroomVM.loadInitialMessages()
+        }
+        .onAppear() {
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+                self.chatroomVM.authorizationStatus = status
             }
+            self.chatroomVM.loadInitialMessages()
+        }
+    }
+    
+    func formattedDate(from timestamp: TimeInterval) -> String {
+        let date = Date(timeIntervalSince1970: timestamp)
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
     }
     
     var messagesListView: some View {
+        
         ScrollViewReader { scrollView in
+            @Bindable var chatroomVMBindable = chatroomVM
             List {
-                ForEach(chatroomVM.messages, id: \.id) { msg in
-                    self.getMessageView(message: msg)
-                        .listRowSeparator(.hidden)
+                ForEach(chatroomVMBindable.messages, id: \.id) { msg in
+                    VStack(alignment: .center) {
+                        self.getMessageView(message: msg)
+                        Text(formattedDate(from: msg.unixTime))
+                            .foregroundStyle(.secondary)
+                            .font(.footnote)
+                    }.listRowSeparator(.hidden)
+                        .padding(.horizontal)
+                        .frame(width: UIScreen.screenWidth)
+                        .id(msg.id)
+                        
+                }.onAppear {
+                    withAnimation {
+                        scrollView.scrollTo(chatroomVM.messages.last?.id, anchor: .top)
+                    }
+                }
+                .onChange(of: chatroomVMBindable.shouldScrollToBottom) { oldValue, newValue in
+                    withAnimation {
+                        scrollView.scrollTo(chatroomVM.messages.last?.id, anchor: .top)
+                    }
                 }
             }.scrollDismissesKeyboard(.immediately)
                 .listStyle(.plain)
                 .frame(width: UIScreen.screenWidth)
-                .onAppear {
-                    withAnimation {
-                        scrollView.scrollTo(self.chatroomVM.messages.last?.id, anchor: .top)
-                    }
-                    
-                }
+                
         }
     }
     
@@ -203,10 +220,16 @@ struct ChatroomView: View {
     }
     
     func getMessageView(message: MPMessage) -> AnyView {
+        
         if let image = UIImage(data: message.data) {
-            return AnyView(PeerImageMessageView(messageImage: image, isCurrentUser: chatroomVM.isCurrentUser(message: message), userUIImage: chatroomVM.companion.picture))
-        } else if let text = String.init(data: message.data, encoding: .utf8) {
-            return AnyView(PeerTextMessageView(message: text, isCurrentUser: chatroomVM.isCurrentUser(message: message), userUIImage: chatroomVM.companion.picture))
+            return AnyView(PeerImageMessageView(messageImage: image, 
+                                                isCurrentUser: chatroomVM.isCurrentUser(message: message),
+                                                userUIImage: chatroomVM.companion.picture))
+        } else if let text = String.init(data: message.data, 
+                                         encoding: .utf8) {
+            return AnyView(PeerTextMessageView(message: text,
+                                               isCurrentUser: chatroomVM.isCurrentUser(message: message),
+                                               userUIImage: chatroomVM.companion.picture))
         } else {
             return AnyView(EmptyView())
         }

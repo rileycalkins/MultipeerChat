@@ -9,7 +9,14 @@
 import MultipeerConnectivity
 import SwiftUI
 
-struct BrowsedPeer: Identifiable {
+struct BrowsedPeer: Identifiable, Equatable {
+    
+    static func == (rhs: BrowsedPeer, lhs: BrowsedPeer) -> Bool {
+        return rhs.currentStatus == lhs.currentStatus
+        && rhs.peerID == lhs.peerID
+        && rhs.description == lhs.description
+        && rhs.id == lhs.id
+    }
     
     enum Status: String {
         case connected
@@ -41,11 +48,11 @@ struct BrowsedPeer: Identifiable {
         var imageString: String {
             switch self {
             case .connected:
-                return "checkmark.circle"
+                return "person.wave.2"
             case .connecting:
-                return "point.3.filled.connected.trianglepath.dotted"
+                return "person.line.dotted.person"
             case .available:
-                return "point.3.connected.trianglepath.dotted"
+                return "person.badge.plus"
             }
         }
     }

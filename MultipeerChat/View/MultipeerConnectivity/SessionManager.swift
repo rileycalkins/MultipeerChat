@@ -11,7 +11,7 @@ import MultipeerConnectivity
 class SessionManager: NSObject {
     
     static let shared = SessionManager()
-    private var sessions = [MCSession]()
+    var sessions = [MCSession]()
     
     
     
@@ -44,5 +44,11 @@ class SessionManager: NSObject {
             session.delegate = nil
         }
         sessions = []
+    }
+    
+    func removePeerSession(peerID: MCPeerID) {
+        var session = sessions.first(where: { $0.connectedPeers.contains(peerID) })
+        sessions.removeAll(where: { $0 == session })
+        session?.delegate = nil
     }
 }

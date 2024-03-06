@@ -29,6 +29,9 @@ struct PeerImageMessageView : View {
                 Spacer()
             }
             ContentImageMessageView(messageImage: messageImage, isCurrentUser: isCurrentUser)
-        }
+            if !isCurrentUser {
+                Spacer()
+            }
+        }.frame(alignment: isCurrentUser ? .trailing : .leading)
     }
 }

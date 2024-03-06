@@ -27,6 +27,9 @@ struct PeerTextMessageView : View {
                 Spacer()
             }
             ContentTextMessageView(contentMessage: message, isCurrentUser: isCurrentUser)
+            if !isCurrentUser {
+                Spacer()
+            }
         }.frame(alignment: isCurrentUser ? .trailing : .leading)
     }
 }

@@ -13,6 +13,7 @@ import PhotosUI
 @Observable
 class ChatroomViewModel: NSObject {
     
+    var shouldScrollToBottom: Bool = false
     var authorizationStatus: PHAuthorizationStatus = .notDetermined
     let companion : CompanionMP
     var messages = [MPMessage]()
@@ -45,8 +46,8 @@ class ChatroomViewModel: NSObject {
         print("Loading messages")
         let userMessages = MPMessage.getMutualMessages(between: companion.id, and: id, paging: currentPage)
         if userMessages.count > 0 {
+            messages.insert(contentsOf: userMessages, at: currentPage)
             currentPage += 1
-            messages.insert(contentsOf: userMessages, at: 0)
         }
     }
     
@@ -57,6 +58,7 @@ class ChatroomViewModel: NSObject {
             messageText = ""
             UserMessageSaver.messageSent(to: companion, decodedMessage: frameworkMessage)
         }
+        shouldScrollToBottom.toggle()
     }
     
     func sendImageMessage(image: UIImage) {
@@ -65,6 +67,7 @@ class ChatroomViewModel: NSObject {
         if isSent {
             UserMessageSaver.messageSent(to: companion, decodedMessage: frameworkMessage)
         }
+        shouldScrollToBottom.toggle()
     }
     
     func isCurrentUser(message: MPMessage) -> Bool {
@@ -81,6 +84,7 @@ extension ChatroomViewModel: MCSessionDelegate {
         if let companion = (CompanionMP.getAll().first {
             $0.mcPeerID == peerID }) {
             ReceivedMessageHandler.handleReceivedUserMessage(messageData: data, from: companion)
+            shouldScrollToBottom.toggle()
         }
     }
     

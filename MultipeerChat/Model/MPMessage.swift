@@ -47,7 +47,7 @@ class MPMessage: Identifiable {
     
     static func getMutualMessages(between peer1ID: UUID, and peer2ID: UUID, paging: Int? = nil) -> [MPMessage] {
         var messages = [MPMessage]()
-        let sortDescriptor = [CoreDataSortDescriptor(key: timeKey, isAscending: false)]
+        let sortDescriptor = [CoreDataSortDescriptor(key: timeKey, isAscending: true)]
         let predicateStr = "(\(recipientPeerHashKey) == %@ AND \(senderPeerHashKey) == %@) OR (\(senderPeerHashKey) == %@ AND \(recipientPeerHashKey) == %@)"
         guard let managedObjects = coreDataHandler.getData(predicate: NSPredicate(format: predicateStr, peer1ID.uuidString, peer2ID.uuidString, peer1ID.uuidString, peer2ID.uuidString), sortDescriptors: sortDescriptor, paging: paging) else {
             return messages
