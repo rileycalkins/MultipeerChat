@@ -9,3 +9,7 @@
 protocol MessageOperations: AnyObject {
     func added(message: MPMessage)
 }
+
+protocol GroupMessageOperations: AnyObject {
+    func added(message: MPGroupMessage)
+}

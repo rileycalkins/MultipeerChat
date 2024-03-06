@@ -32,6 +32,13 @@ class SessionManager: NSObject {
         }
     }
     
+    func getMutualSession(with peerIDs: [MCPeerID]) -> MCSession? {
+        let session = sessions.first {
+            $0.connectedPeers.contains(peerIDs)
+        }
+        return session 
+    }
+    
     func getMutualSession(with peerID: MCPeerID) -> MCSession? {
         let session = sessions.first {
             $0.connectedPeers.contains(peerID)
