@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+
 struct BrowsedPeerCell: View {
     @Binding var peer: BrowsedPeer
     var action: (() -> ())?

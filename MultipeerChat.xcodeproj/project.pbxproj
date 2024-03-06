@@ -62,6 +62,7 @@
 		21BE0FC52B94781D00AD55C9 /* ReConnectingUsersMPC.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ReConnectingUsersMPC.md; sourceTree = "<group>"; };
 		21E1AA062B979ABB00D60D8C /* UIScreen+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+Extensions.swift"; sourceTree = "<group>"; };
 		21E1AA082B97C26E00D60D8C /* Text+Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text+Modifiers.swift"; sourceTree = "<group>"; };
+		21E1AA0A2B98634F00D60D8C /* MultipleSimulators.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MultipleSimulators.md; sourceTree = "<group>"; };
 		541F028624C1EB760029F156 /* UserDataRemoval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataRemoval.swift; sourceTree = "<group>"; };
 		542553A7241AE4F400E00962 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		542C58E7242511E2006AAE74 /* MultipeerConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerConstants.swift; sourceTree = "<group>"; };
@@ -221,6 +222,7 @@
 			isa = PBXGroup;
 			children = (
 				2147554D2B93877200321D5B /* ConversionToGroupsGPT.md */,
+				21E1AA0A2B98634F00D60D8C /* MultipleSimulators.md */,
 				21BE0FC52B94781D00AD55C9 /* ReConnectingUsersMPC.md */,
 				546D7063241296DB0005AA27 /* AppDelegate.swift */,
 				546D7065241296DB0005AA27 /* SceneDelegate.swift */,

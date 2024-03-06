@@ -59,6 +59,7 @@ extension CompanionMP {
             try saveMCPeerID(mcPeerID: mcPeerID, newManagedObject: managedObject)
             savePeerImage(image: picture, newManagedObject: managedObject)
         } catch {
+            print("setNewDataForCompanion error.localizedDescription")
             print(error.localizedDescription)
         }
     }
@@ -73,6 +74,7 @@ extension CompanionMP {
             saveUniqueID(managedObject)
             CompanionMP.delegate?.added(peer: self)
         } catch {
+            print("saveNewCompanion error.localizedDescription")
             print(error.localizedDescription)
         }
     }

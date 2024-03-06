@@ -37,6 +37,7 @@ class UserMP {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: newValue, requiringSecureCoding: true)
                 coreDataHandler.setDataOnlyObject(key: mcPeerIDKey, data: data)
             } catch {
+                print("peerID: MCPeerID? error.localizedDescription")
                 print(error.localizedDescription)
             }
         }

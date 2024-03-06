@@ -30,8 +30,10 @@ struct ChatsView: View {
                         HStack {
                             ForEach($multipeerSessionManagerBindable.availablePeers) { browsedPeer in
                                 BrowsedPeerCell(peer: browsedPeer) {
-                                    self.multipeerSessionManager.peerClicked(browsedPeer: browsedPeer.wrappedValue)
-                                    self.multipeerSessionManager.stopBrowsing()
+                                    self.multipeerSessionManager.peerClicked(browsedPeer: browsedPeer.wrappedValue) {
+                                        self.multipeerSessionManager.stopBrowsing()
+                                    }
+                                    
                                 }
                             }
                         }
@@ -139,8 +141,6 @@ struct ChatsView: View {
             }
             .onAppear {
                 self.reportOnAppear()
-                self.multipeerSessionManager.startAdvertising()
-                self.multipeerSessionManager.startBrowsing()
             }
             .alert(isPresented: $multipeerSessionManagerBindable.didNotStartBrowsing) {
                 Alert(title: Text("Search Error"), message: Text(multipeerSessionManager.startBrowsingErrorMessage), dismissButton: .default( Text("OK"), action: {
@@ -153,16 +153,24 @@ struct ChatsView: View {
             .alert(isPresented: $multipeerSessionManagerBindable.shouldShowConnectAlert) {
                 Alert(title: Text("Invitation"), message: Text(multipeerSessionManagerBindable.peerWantsToConnectMessage), primaryButton: .default(Text("Accept"), action: {
                     self.multipeerSessionManager.replyToRequest(isAccepted: true)
-                    self.multipeerSessionManager.stopBrowsing()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        self.multipeerSessionManager.startBrowsing()
-                    }
+//                    self.multipeerSessionManager.stopBrowsing()
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                        self.multipeerSessionManager.startBrowsing()
+//                    }
                 }), secondaryButton: .cancel(Text("Decline"), action: {
                     self.multipeerSessionManager.replyToRequest(isAccepted: false)
                 }))
             }
+//            .alert(isPresented: $multipeerSessionManagerBindable.showPeerConnectedAlert) {
+//                Alert(title: Text("Peer Connected"), message: Text("The peer connection request was approved"), primaryButton: .default(Text("Okay"), action: {
+//                    self.multipeerSessionManager.startBrowsing()
+//                }), secondaryButton: .cancel(Text("Close"), action: {
+//                    self.multipeerSessionManager.showPeerConnectedAlert.toggle()
+//                }))
+//            }
         }
         .loadingView(loadingState: loadingState)
+        
     }
     
     var browserButton: some View {

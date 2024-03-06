@@ -13,21 +13,11 @@ import Observation
 @Observable
 class MultipeerSessionManager: NSObject {
     
+    var knownPeers = Set<MCPeerID>()
+    
     //MARK: Browser Properties
     var isCurrentlyBrowsing = false
-    var publicPeers: [BrowsedPeer] {
-        get {
-            return browsedPeers
-        }
-        set {
-            availablePeers = browsedPeers.filter { $0.currentStatus == .available }
-            connectingPeers = browsedPeers.filter { $0.currentStatus == .connecting }
-            connectedPeers = browsedPeers.filter({ $0.currentStatus == .connected })
-            browsedPeers = newValue
-        }
-    }
     
-    private var browsedPeers:[BrowsedPeer] = []
     var didNotStartBrowsing = false
     var couldntConnect = false
     
@@ -36,23 +26,25 @@ class MultipeerSessionManager: NSObject {
     let browser: MCNearbyServiceBrowser
     let invitationTimeout: TimeInterval = 10.0
     
-    var availablePeers : [BrowsedPeer] = [] {
-        didSet {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.startBrowsing()
-            }
+    private var browsedPeers:[BrowsedPeer] = []
+    
+    var publicPeers: [BrowsedPeer] {
+        get {
+            return browsedPeers
+        }
+        set {
+            browsedPeers = newValue
+            availablePeers = browsedPeers.filter { $0.currentStatus == .available }
+            connectingPeers = browsedPeers.filter { $0.currentStatus == .connecting }
+            connectedPeers = browsedPeers.filter({ $0.currentStatus == .connected })
         }
     }
+    var availablePeers : [BrowsedPeer] = []
     
-    var connectingPeers: [BrowsedPeer] = [] {
-        didSet {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.startBrowsing()
-            }
-        }
-    }
+    var connectingPeers: [BrowsedPeer] = [] 
     
-    var connectedPeers : [BrowsedPeer] = [] {
+    var connectedPeers : [BrowsedPeer] = [] 
+    {
         didSet {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.startBrowsing()
@@ -112,9 +104,11 @@ extension MultipeerSessionManager {
         isCurrentlyAdvertising = false
     }
     func replyToRequest(isAccepted: Bool) {
+        stopBrowsing()
         isAccepted ? acceptRequest?() : declineRequest?()
     }
     func handlePeerInvitation(_ peerID: MCPeerID, _ invitationHandler: @escaping (Bool, MCSession?) -> Void) {
+        
         acceptRequest = {
             invitationHandler(true, self.newSession)
             print("Accepted Request")
@@ -125,6 +119,7 @@ extension MultipeerSessionManager {
         }
         peerWantsToConnectMessage = "\(peerID.displayName) wants to chat with you."
         shouldShowConnectAlert = true
+        startBrowsing()
     }
 }
 
@@ -137,10 +132,6 @@ extension MultipeerSessionManager: MCNearbyServiceAdvertiserDelegate {
         browser.stopBrowsingForPeers()
         print("Received invitation from \(peerID.displayName)")
         handlePeerInvitation(peerID, invitationHandler)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.browser.startBrowsingForPeers()
-        }
-        
     }
     
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, 
@@ -167,8 +158,9 @@ extension MultipeerSessionManager {
         isCurrentlyBrowsing = false
     }
     
-    func peerClicked(browsedPeer: BrowsedPeer) {
+    func peerClicked(browsedPeer: BrowsedPeer, closure: @escaping () -> ()) {
         if isPeerAvailableToConnect(peerID: browsedPeer.peerID) {
+            knownPeers.insert(browsedPeer.peerID)
             browser.invitePeer(browsedPeer.peerID,
                                to: newSession,
                                withContext: nil,
@@ -187,15 +179,15 @@ extension MultipeerSessionManager {
         SessionManager.shared.removePeerSession(peerID: peerID)
     }
     
-    func saveConnectedPeerIdentifier(_ peerID: MCPeerID) {
-        var connectedPeers = UserDefaults.standard.stringArray(forKey: "ConnectedPeers")
-        if let unwrappedConnectedPeers = connectedPeers {
-            if !unwrappedConnectedPeers.contains(peerID.displayName) {
-                connectedPeers?.append(peerID.displayName)
-                UserDefaults.standard.set(connectedPeers, forKey: "ConnectedPeers")
-            }
-        }
-    }
+//    func saveConnectedPeerIdentifier(_ peerID: MCPeerID) {
+//        var connectedPeers = UserDefaults.standard.stringArray(forKey: "ConnectedPeers")
+//        if let unwrappedConnectedPeers = connectedPeers {
+//            if !unwrappedConnectedPeers.contains(peerID.displayName) {
+//                connectedPeers?.append(peerID.displayName)
+//                UserDefaults.standard.set(connectedPeers, forKey: "ConnectedPeers")
+//            }
+//        }
+//    }
     
     func decidePeerStatus(_ peer: BrowsedPeer) {
         if SessionManager.shared.getMutualSession(with: peer.peerID) != nil {
@@ -242,6 +234,7 @@ extension MultipeerSessionManager:  MCNearbyServiceBrowserDelegate {
         lostPeer peerID: MCPeerID
     ) {
         print("Peer \(peerID.displayName) is lost. Removing...")
+        removePeer(peerID: peerID)
         if publicPeers.contains(BrowsedPeer(peerID: peerID)) {
             handlePeerInvitation(peerID) { accepted, session in
                 switch accepted {
@@ -254,7 +247,6 @@ extension MultipeerSessionManager:  MCNearbyServiceBrowserDelegate {
                 }
             }
         }
-        
     }
     
     func browser(
@@ -272,7 +264,16 @@ extension MultipeerSessionManager: MCSessionDelegate {
         peer peerID: MCPeerID,
         didChange state: MCSessionState
     ) {
+        if state == .notConnected {
+            for peer in knownPeers {
+                if !session.connectedPeers.contains(peer) {
+                    browser.invitePeer(peer, to: session, withContext: nil, timeout: 10)
+                }
+            }
+        }
+        
         DispatchQueue.main.async { [weak self] in
+            
             switch state {
             case .notConnected:
                 print("Failed to connect to \(peerID.displayName)")
@@ -280,9 +281,12 @@ extension MultipeerSessionManager: MCSessionDelegate {
                 self?.setStatus(for: peerID, status: .available)
                 
             case .connecting:
+                self?.stopBrowsing()
                 print("Connecting to \(peerID.displayName)")
                 self?.setStatus(for: peerID, status: .connecting)
-                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self?.startBrowsing()
+                }
             case .connected:
                 if peerID != UserMP.shared.peerID {
                     print("Advertiser - Received data from \(peerID.displayName)")
@@ -298,6 +302,9 @@ extension MultipeerSessionManager: MCSessionDelegate {
                         let messageSender = MessageSender(companionPeer: peerID, sessionDelegate: self)
                         messageSender.sendSelfInfo()
                     })
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        self?.startBrowsing()
+                    }
                 }
                 
             @unknown default:

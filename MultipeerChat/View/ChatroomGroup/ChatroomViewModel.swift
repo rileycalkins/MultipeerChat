@@ -51,6 +51,15 @@ class ChatroomViewModel: NSObject {
         }
     }
     
+    
+    func sendGroupMessage(message: String) {
+        guard let data = message.data(using: .utf8) else { return }
+        guard let session = SessionManager.shared.getMutualSession(with: companion.mcPeerID) else { return }
+        if !session.connectedPeers.isEmpty {
+            try? session.send(data, toPeers: session.connectedPeers, with: .reliable)
+        }
+    }
+    
     func sendTextMessage() {
         let frameworkMessage = MultipeerFrameworkMessage(data: Data(messageText.utf8), contentType: .text, commuType: .user)
         let isSent = messageSender.sendMessage(message: frameworkMessage)

@@ -19,11 +19,21 @@ class ChatsViewModel {
     
     func updatePeers() {
         peers = CompanionMP.getAll().filter { $0.mcPeerID != UserMP.shared.peerID }
+        print("updatePeers peers")
         print(peers)
+    }
+    
+    func createGroup(peers: [CompanionMP]) {
+        
+    }
+    
+    func isPeerConnected(peerID: MCPeerID) -> Bool {
+        return peers.contains(where: { $0.mcPeerID == peerID })
     }
 }
 
 extension ChatsViewModel: PeerOperations {
+    
     func added(peer: CompanionMP) {
         DispatchQueue.main.async { [weak self] in
             self?.peers.append(peer)
