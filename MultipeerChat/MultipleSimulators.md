@@ -33,6 +33,11 @@ Look through the output for the devices you're interested in and note down their
 5. Install the App on Each Simulator
 Now, use xcrun simctl to install your app on each simulator using their UDIDs. You'll need to find the path to the .app bundle in the ./build directory (or wherever you chose to output the build artifacts).
 
+iPhone 15 (2C32FE56-948E-4EB3-9F01-99E0D98D5A28) (Shutdown) 
+    iPhone 15 Plus (8F0F7E18-3072-42E9-853F-4520904DA4D2) (Booted) 
+    iPhone 15 Pro (2FEBAC39-AE4B-41C9-A539-A7366BB12DE9) (Shutdown) 
+    iPhone 15 Pro Max (89F178FC-499A-43FB-9EAD-1803DA7EF7C6) (Booted) 
+
 sh
 Copy code
 xcrun simctl install <device_udid> path/to/yourApp.app

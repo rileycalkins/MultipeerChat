@@ -10,6 +10,7 @@ import SwiftUI
 
 
 struct BrowsedPeerCell: View {
+    @Environment(MultipeerSessionManager.self) var multipeerSessionManager: MultipeerSessionManager
     @Binding var peer: BrowsedPeer
     var action: (() -> ())?
     
@@ -65,6 +66,22 @@ struct BrowsedPeerCell: View {
                         .stroke(peer.currentStatus.textColor, lineWidth: 2)
                         .padding(1)
                 }
+        }
+        .overlay(alignment: .topTrailing) {
+            if peer.currentStatus == .connected {
+                Button {
+//                    multipeerSessionManager.stopBrowsing()
+//                    multipeerSessionManager.connectedPeers.removeAll(where: { $0.peerID == peer.peerID })
+                    multipeerSessionManager.removePeer(peerID: peer.peerID)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        multipeerSessionManager.startBrowsing()
+                    }
+                } label: {
+                    Image(systemName: "x.circle")
+                        .font(.largeTitle)
+                        .foregroundStyle(.white)
+                }
+            }
         }
     }
 }

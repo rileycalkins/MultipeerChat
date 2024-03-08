@@ -11,7 +11,8 @@ import PhotosUI
 import Photos
 
 struct ChatroomView: View {
-    let companion: CompanionMP
+    let companion: CompanionMP?
+    var companions: [CompanionMP]?
     var chatroomVM: ChatroomViewModel
     
     @State var selectedPhotos: [PhotosPickerItem] = []
@@ -28,6 +29,10 @@ struct ChatroomView: View {
         UITableView.appearance().tableFooterView = UIView()
     }
     
+    init(multipeerUsers: [CompanionMP]) {
+        self.companions = multipeerUsers
+        chatroomVM = ChatroomViewModel(peer: <#T##CompanionMP#>)
+    }
     
     var body: some View {
         VStack(alignment: .leading) {

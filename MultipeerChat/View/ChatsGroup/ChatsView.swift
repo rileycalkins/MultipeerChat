@@ -65,6 +65,16 @@ struct ChatsView: View {
                 }
                 
                 VStack {
+                    Group {
+                        let groupChatDestination = ChatroomView(multipeerUser: <#T##CompanionMP#>)
+                        NavigationLink {
+                            groupChatDestination
+                        } label: {
+                            
+                        }
+
+                    }
+                    NavigationLink(destination: )
                     List {
                         ForEach(chatsViewModel.peers) { peer in
                             let chatroomViewDestination = ChatroomView(multipeerUser: peer)
@@ -138,6 +148,18 @@ struct ChatsView: View {
                         }
                     }
                 }
+            }
+            .onAppear {
+                for peer in chatsViewModel.peers {
+                    if !multipeerSessionManagerBindable.connectedPeers.contains(where: { $0.peerID == peer.mcPeerID }) {
+                        if multipeerSessionManagerBindable.availablePeers.contains(where: { $0.peerID == peer.mcPeerID }) {
+                            multipeerSessionManagerBindable.peerClicked(browsedPeer: BrowsedPeer(peerID: peer.mcPeerID)) {
+                                
+                            }
+                        }
+                    }
+                }
+                multipeerSessionManagerBindable.stopBrowsing()
             }
             .onAppear {
                 self.reportOnAppear()

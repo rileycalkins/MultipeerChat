@@ -15,7 +15,8 @@ class ChatroomViewModel: NSObject {
     
     var shouldScrollToBottom: Bool = false
     var authorizationStatus: PHAuthorizationStatus = .notDetermined
-    let companion : CompanionMP
+    let companion: CompanionMP?
+    var companions: [CompanionMP]?
     var messages = [MPMessage]()
     var errorAlertShown = false
     var messageText = ""
@@ -29,6 +30,11 @@ class ChatroomViewModel: NSObject {
         super.init()
         MPMessage.delegate = self
         messageSender.sessionDelegate = self
+    }
+    
+    init(peers: [CompanionMP]) {
+        self.companions = peers
+        messageSender = MessageSender(companionPeer: <#T##MCPeerID#>)
     }
     
     func loadInitialMessages() {
@@ -52,11 +58,15 @@ class ChatroomViewModel: NSObject {
     }
     
     
-    func sendGroupMessage(message: String) {
+    func sendGroupMessage(message: String, using session: MCSession) {
         guard let data = message.data(using: .utf8) else { return }
-        guard let session = SessionManager.shared.getMutualSession(with: companion.mcPeerID) else { return }
         if !session.connectedPeers.isEmpty {
-            try? session.send(data, toPeers: session.connectedPeers, with: .reliable)
+            do {
+                try session.send(data, toPeers: session.connectedPeers, with: .reliable)
+            } catch {
+                print("Error sending message to all peers: \(error.localizedDescription)")
+            }
+            
         }
     }
     

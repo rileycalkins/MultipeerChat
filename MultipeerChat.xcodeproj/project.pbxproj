@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		212BB1392B995696005D53DD /* multipleSimulators.config in Resources */ = {isa = PBXBuildFile; fileRef = 212BB1372B995696005D53DD /* multipleSimulators.config */; };
+		212BB13A2B995696005D53DD /* multipleSimulatorsStartup.sh in Resources */ = {isa = PBXBuildFile; fileRef = 212BB1382B995696005D53DD /* multipleSimulatorsStartup.sh */; };
 		2182770E2B94B19D00EFC1B6 /* MultipeerSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2182770D2B94B19D00EFC1B6 /* MultipeerSessionManager.swift */; };
 		218277102B950CEF00EFC1B6 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2182770F2B950CEF00EFC1B6 /* LoadingView.swift */; };
 		21E1AA072B979ABB00D60D8C /* UIScreen+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E1AA062B979ABB00D60D8C /* UIScreen+Extensions.swift */; };
@@ -57,6 +59,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		212BB1372B995696005D53DD /* multipleSimulators.config */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = multipleSimulators.config; sourceTree = "<group>"; };
+		212BB1382B995696005D53DD /* multipleSimulatorsStartup.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = multipleSimulatorsStartup.sh; sourceTree = "<group>"; };
 		2147554D2B93877200321D5B /* ConversionToGroupsGPT.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ConversionToGroupsGPT.md; sourceTree = "<group>"; };
 		2182770D2B94B19D00EFC1B6 /* MultipeerSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerSessionManager.swift; sourceTree = "<group>"; };
 		2182770F2B950CEF00EFC1B6 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -207,6 +211,8 @@
 		546D7057241296DB0005AA27 = {
 			isa = PBXGroup;
 			children = (
+				212BB1382B995696005D53DD /* multipleSimulatorsStartup.sh */,
+				212BB1372B995696005D53DD /* multipleSimulators.config */,
 				546D7062241296DB0005AA27 /* MultipeerChat */,
 				546D7061241296DB0005AA27 /* Products */,
 			);
@@ -343,6 +349,7 @@
 				546D705C241296DB0005AA27 /* Sources */,
 				546D705D241296DB0005AA27 /* Frameworks */,
 				546D705E241296DB0005AA27 /* Resources */,
+				212BB1342B994C42005D53DD /* Multiple Simulators */,
 			);
 			buildRules = (
 			);
@@ -392,6 +399,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				212BB13A2B995696005D53DD /* multipleSimulatorsStartup.sh in Resources */,
+				212BB1392B995696005D53DD /* multipleSimulators.config in Resources */,
 				546D7070241296E20005AA27 /* LaunchScreen.storyboard in Resources */,
 				546D706D241296E20005AA27 /* Preview Assets.xcassets in Resources */,
 				546D706A241296E20005AA27 /* Assets.xcassets in Resources */,
@@ -399,6 +408,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		212BB1342B994C42005D53DD /* Multiple Simulators */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Multiple Simulators";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "custom_sim=`xcrun simctl list | grep ‘Multiple Simulators’ | awk -F’[()]’ ‘{print $2}’`\n\nif [ ! -z “${custom_sim}” ] && [ “${TARGET_DEVICE_IDENTIFIER}” = “${custom_sim}” ]; then\n\n/bin/sh multipleSimulatorsStartup.sh &\n\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		546D705C241296DB0005AA27 /* Sources */ = {
@@ -596,6 +626,7 @@
 				DEVELOPMENT_TEAM = 6P8KRE82L9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = MultipeerChat/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MultipeerChat;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -619,6 +650,7 @@
 				DEVELOPMENT_TEAM = 6P8KRE82L9;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = MultipeerChat/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MultipeerChat;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
