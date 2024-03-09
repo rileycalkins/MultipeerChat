@@ -61,6 +61,12 @@ struct PeerChatCell: View {
                         Text(self.multipeerUser.id.uuidString.replacingOccurrences(of: "-", with: ""))
                             .font(.caption2)
                             .foregroundStyle(.secondary)
+                        Text(String(describing: SessionManager.shared.getMutualSession(with: [multipeerUser.mcPeerID])?.connectedPeers))
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                        Text(String(describing: SessionManager.shared.getMutualSession(with: [multipeerUser.mcPeerID])?.myPeerID))
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
                     }
                     Spacer()
                 }

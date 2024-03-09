@@ -15,8 +15,7 @@ class ChatroomViewModel: NSObject {
     
     var shouldScrollToBottom: Bool = false
     var authorizationStatus: PHAuthorizationStatus = .notDetermined
-    let companion: CompanionMP?
-    var companions: [CompanionMP]?
+    let companion: CompanionMP
     var messages = [MPMessage]()
     var errorAlertShown = false
     var messageText = ""
@@ -32,16 +31,16 @@ class ChatroomViewModel: NSObject {
         messageSender.sessionDelegate = self
     }
     
-    init(peers: [CompanionMP]) {
-        self.companions = peers
-        messageSender = MessageSender(companionPeer: <#T##MCPeerID#>)
-    }
-    
     func loadInitialMessages() {
         guard currentPage == 0 else {
             return
         }
         getMoreMutualMessages()
+    }
+    
+    func getUserSession(for peerID: MCPeerID) -> MCSession? {
+        let session = SessionManager.shared.getMutualSession(with: [peerID])
+        return session
     }
     
     private func getMoreMutualMessages() {
@@ -55,6 +54,7 @@ class ChatroomViewModel: NSObject {
             messages.insert(contentsOf: userMessages, at: currentPage)
             currentPage += 1
         }
+        
     }
     
     

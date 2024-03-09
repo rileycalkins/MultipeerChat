@@ -54,7 +54,7 @@ class SessionManager: NSObject {
     }
     
     func removePeerSession(peerID: MCPeerID) {
-        var session = sessions.first(where: { $0.connectedPeers.contains(peerID) })
+        let session = sessions.first(where: { $0.connectedPeers.contains(peerID) })
         sessions.removeAll(where: { $0 == session })
         session?.delegate = nil
     }

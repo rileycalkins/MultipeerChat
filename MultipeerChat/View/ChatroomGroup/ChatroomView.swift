@@ -11,8 +11,7 @@ import PhotosUI
 import Photos
 
 struct ChatroomView: View {
-    let companion: CompanionMP?
-    var companions: [CompanionMP]?
+    var companion: CompanionMP?
     var chatroomVM: ChatroomViewModel
     
     @State var selectedPhotos: [PhotosPickerItem] = []
@@ -27,11 +26,6 @@ struct ChatroomView: View {
         chatroomVM = ChatroomViewModel(peer: multipeerUser)
         UITableView.appearance().separatorStyle = .none
         UITableView.appearance().tableFooterView = UIView()
-    }
-    
-    init(multipeerUsers: [CompanionMP]) {
-        self.companions = multipeerUsers
-        chatroomVM = ChatroomViewModel(peer: <#T##CompanionMP#>)
     }
     
     var body: some View {
@@ -85,18 +79,19 @@ struct ChatroomView: View {
                             Image(systemName: SessionManager.shared.getMutualSession(with: chatroomVM.companion.mcPeerID) != nil ? "wifi.circle.fill" : "wifi.exclamationmark.circle.fill")
                                 .foregroundStyle(SessionManager.shared.getMutualSession(with: chatroomVM.companion.mcPeerID) != nil ? .green : .red)
                                 .symbolEffect(.pulse)
-                                .offset(x: 10, y: 4)
+                                .offset(x: 10, y: 2)
                                 .background {
                                     Circle()
                                         .fill(.white)
-                                        .offset(x: 10, y: 4)
+                                        .offset(x: 10, y: 2)
                                 }
                         }
+                        
                 }
             }
         }
         .navigationTitle(self.chatroomVM.companion.mcPeerID.displayName)
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.large)
         .onChange(of: selectedPhotos) { oldValue, newValue in
             if newValue.count == 0 {
                 processedImages = []
@@ -112,6 +107,7 @@ struct ChatroomView: View {
             }
             self.chatroomVM.loadInitialMessages()
         }
+        
     }
     
     func formattedDate(from timestamp: TimeInterval) -> String {
@@ -164,22 +160,6 @@ struct ChatroomView: View {
                             .resizable()
                             .frame(width: 80, height: 100)
                             .clipShape(.rect(cornerRadius: 10))
-                            .overlay(alignment:.topTrailing) {
-                                Image(systemName: "arrow.up.forward")
-                                    .font(.title)
-                                    .foregroundStyle(.white)
-                                    .rotationEffect(.degrees(-10))
-                                    .padding(8)
-                                    .opacity(0.7)
-                            }
-                            .overlay(alignment: .bottomLeading) {
-                                Image(systemName: "arrow.down.backward")
-                                    .font(.title)
-                                    .foregroundStyle(.white)
-                                    .rotationEffect(.degrees(-10))
-                                    .padding(8)
-                                    .opacity(0.7)
-                            }
                     }
                 }
             }

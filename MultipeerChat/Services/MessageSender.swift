@@ -82,17 +82,11 @@ class GroupMessageSender {
 
 class MessageSender {
     
-    private let companionPeer: MCPeerID?
-    var companionPeers: [MCPeerID]?
+    private let companionPeer: MCPeerID
     weak var sessionDelegate: MCSessionDelegate?
     
     init(companionPeer: MCPeerID, sessionDelegate: MCSessionDelegate? = nil) {
         self.companionPeer = companionPeer
-        self.sessionDelegate = sessionDelegate
-    }
-    
-    init(companionPeers: [MCPeerID]?, sessionDelegate: MCSessionDelegate? = nil) {
-        self.companionPeers = companionPeers
         self.sessionDelegate = sessionDelegate
     }
     
@@ -103,15 +97,10 @@ class MessageSender {
     }()
     
     var session: MCSession? {
-        if let companionPeer = companionPeer {
-            let session = SessionManager.shared.getMutualSession(with: companionPeer)
-            session?.delegate = sessionDelegate
-            return session
-        } else if let companionPeers = companionPeers {
-            let session = SessionManager.shared.getMutualSession(with: companionPeers)
-            session?.delegate = sessionDelegate
-            return session
-        }
+        let session = SessionManager.shared.getMutualSession(with: companionPeer)
+        session?.delegate = sessionDelegate
+        return session
+        
     }
     
     @discardableResult
@@ -125,15 +114,7 @@ class MessageSender {
             return false
         }
         do {
-            if let companionPeers {
-                for peer in companionPeers {
-                    try session.send(encodedVal, toPeers: [peer], with: .reliable)
-                }
-            }
-            if let companionPeer = companionPeer {
-                try session.send(encodedVal, toPeers: [companionPeer], with: .reliable)
-            }
-            
+            try session.send(encodedVal, toPeers: [companionPeer], with: .reliable)
             print("Self info has been sent")
             return true
         } catch {
@@ -142,18 +123,6 @@ class MessageSender {
             return false
         }
     }
-    
-//    @discardableResult
-//    func sendMessage(text: String) -> Bool {
-//        let message = MultipeerFrameworkMessage(data: Data(text.utf8), contentType: .text, commuType: .user)
-//        return sendMessage(message: message)
-//    }
-//
-//    @discardableResult
-//    func sendMessage(image: UIImage) -> Bool {
-//        let message = MultipeerFrameworkMessage(data: image.pngData(), contentType: .image, commuType: .user)
-//        return sendMessage(message: message)
-//    }
 
     @discardableResult
     func sendMessage(message: MultipeerFrameworkMessage) -> Bool {
@@ -165,14 +134,9 @@ class MessageSender {
                 print("nil session")
                 return false
             }
-            if let companionPeer = companionPeer {
-                try session.send(encodedMessage, toPeers: [companionPeer], with: .reliable)
-            }
-            if let companionPeers = companionPeers {
-                for peer in companionPeers {
-                    try session.send(encodedMessage, toPeers: [peer], with: .reliable)
-                }
-            }
+            
+            try session.send(encodedMessage, toPeers: [companionPeer], with: .reliable)
+            
             print("Message sent")
         } catch {
             print("Error in sending the message")

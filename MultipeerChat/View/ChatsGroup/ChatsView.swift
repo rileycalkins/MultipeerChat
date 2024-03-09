@@ -65,21 +65,14 @@ struct ChatsView: View {
                 }
                 
                 VStack {
-                    Group {
-                        let groupChatDestination = ChatroomView(multipeerUser: <#T##CompanionMP#>)
-                        NavigationLink {
-                            groupChatDestination
-                        } label: {
-                            
-                        }
-
-                    }
-                    NavigationLink(destination: )
                     List {
                         ForEach(chatsViewModel.peers) { peer in
                             let chatroomViewDestination = ChatroomView(multipeerUser: peer)
                             NavigationLink(destination: chatroomViewDestination) {
-                                PeerChatCell(multipeerUser: peer, sessionActive: SessionManager.shared.getMutualSession(with: chatroomViewDestination.companion.mcPeerID) != nil)
+                                if let peerID = chatroomViewDestination.companion?.mcPeerID {
+                                    PeerChatCell(multipeerUser: peer, sessionActive: SessionManager.shared.getMutualSession(with: peerID) != nil)
+                                }
+                                
                             }
                             .listRowSeparator(.hidden)
                         }.onDelete { indexSet in
@@ -150,19 +143,11 @@ struct ChatsView: View {
                 }
             }
             .onAppear {
-                for peer in chatsViewModel.peers {
-                    if !multipeerSessionManagerBindable.connectedPeers.contains(where: { $0.peerID == peer.mcPeerID }) {
-                        if multipeerSessionManagerBindable.availablePeers.contains(where: { $0.peerID == peer.mcPeerID }) {
-                            multipeerSessionManagerBindable.peerClicked(browsedPeer: BrowsedPeer(peerID: peer.mcPeerID)) {
-                                
-                            }
-                        }
-                    }
-                }
-                multipeerSessionManagerBindable.stopBrowsing()
-            }
-            .onAppear {
                 self.reportOnAppear()
+                multipeerSessionManagerBindable.stopBrowsing()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    multipeerSessionManagerBindable.startBrowsing()
+                }
             }
             .alert(isPresented: $multipeerSessionManagerBindable.didNotStartBrowsing) {
                 Alert(title: Text("Search Error"), message: Text(multipeerSessionManager.startBrowsingErrorMessage), dismissButton: .default( Text("OK"), action: {
@@ -175,21 +160,10 @@ struct ChatsView: View {
             .alert(isPresented: $multipeerSessionManagerBindable.shouldShowConnectAlert) {
                 Alert(title: Text("Invitation"), message: Text(multipeerSessionManagerBindable.peerWantsToConnectMessage), primaryButton: .default(Text("Accept"), action: {
                     self.multipeerSessionManager.replyToRequest(isAccepted: true)
-//                    self.multipeerSessionManager.stopBrowsing()
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//                        self.multipeerSessionManager.startBrowsing()
-//                    }
                 }), secondaryButton: .cancel(Text("Decline"), action: {
                     self.multipeerSessionManager.replyToRequest(isAccepted: false)
                 }))
             }
-//            .alert(isPresented: $multipeerSessionManagerBindable.showPeerConnectedAlert) {
-//                Alert(title: Text("Peer Connected"), message: Text("The peer connection request was approved"), primaryButton: .default(Text("Okay"), action: {
-//                    self.multipeerSessionManager.startBrowsing()
-//                }), secondaryButton: .cancel(Text("Close"), action: {
-//                    self.multipeerSessionManager.showPeerConnectedAlert.toggle()
-//                }))
-//            }
         }
         .loadingView(loadingState: loadingState)
         

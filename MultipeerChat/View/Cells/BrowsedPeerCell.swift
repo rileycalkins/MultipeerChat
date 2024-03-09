@@ -58,6 +58,7 @@ struct BrowsedPeerCell: View {
             }.foregroundStyle(peer.currentStatus.textColor)
                 .padding(.vertical, 8)
                 .padding(.horizontal)
+                .padding(.trailing, peer.currentStatus == .connected ? 30 : 0)
         }.background {
             peer.currentStatus.textColor.opacity(0.2)
                 .clipShape(.rect(cornerRadius: 10))
@@ -70,17 +71,16 @@ struct BrowsedPeerCell: View {
         .overlay(alignment: .topTrailing) {
             if peer.currentStatus == .connected {
                 Button {
-//                    multipeerSessionManager.stopBrowsing()
-//                    multipeerSessionManager.connectedPeers.removeAll(where: { $0.peerID == peer.peerID })
                     multipeerSessionManager.removePeer(peerID: peer.peerID)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         multipeerSessionManager.startBrowsing()
                     }
                 } label: {
                     Image(systemName: "x.circle")
-                        .font(.largeTitle)
+                        .font(.title)
                         .foregroundStyle(.white)
-                }
+                }.padding(.trailing, 4)
+                    .padding(.top, 4)
             }
         }
     }

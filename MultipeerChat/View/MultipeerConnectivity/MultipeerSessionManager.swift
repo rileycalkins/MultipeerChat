@@ -177,6 +177,12 @@ extension MultipeerSessionManager {
     
     func removePeer(peerID: MCPeerID) {
         SessionManager.shared.removePeerSession(peerID: peerID)
+        connectedPeers.removeAll(where: { $0.peerID == peerID })
+        knownPeers.remove(peerID)
+        stopBrowsing()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.startBrowsing()
+        }
     }
     
 //    func saveConnectedPeerIdentifier(_ peerID: MCPeerID) {
